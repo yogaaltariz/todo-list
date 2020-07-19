@@ -12,11 +12,41 @@
           </div>
           <span class="uppercase font-medium">Tuesday</span>
         </div>
+        <todo-add @addTodo="addTodo" />
         <div id="body" class="pb-10">
-          <todo-item />
+          <todo-item
+            v-for="(todo,index) in todos"
+            :key="index"
+            :text="todo.name"
+            :is-complete="todo.done"
+            :index="index"
+            @changeStatus="changeDone"
+          />
         </div>
       </card>
       <floating-action-button class="mx-auto block -mt-10" />
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      todos: []
+    }
+  },
+  methods: {
+    addTodo (data) {
+      this.todos.push(data)
+    },
+    changeDone (data) {
+      const idx = this.todos.findIndex(function (todo) {
+        return todo.name === data.name
+      })
+
+      this.$set(this.todos, idx, { name: data.name, done: data.done })
+    }
+  }
+}
+</script>
